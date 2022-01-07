@@ -7,26 +7,40 @@ IS_HEAD=1
 counter=0
 headCount=0
 tailCount=0
+
 read -p "How many times you want to flip coin " noOfTime
 
-while [ $counter -lt $noOfTime ]
-do
+read -p "How many coins you want to flip at same time " noOfCoin
+
+function flipCoinFunction(){
 
 	flipCoinResult=$((RANDOM%2))
-	echo $flipCoinResult
+	#echo $flipCoinResult
 
 	if [ $flipCoinResult -eq $IS_HEAD ]
 	then
-		echo "Head"
-		flipCoin[$counter]="Head"
-		#headCount=$headCount+1
-		((headCount++))
+		echo "H"
 	else
-		echo "Tail"
-		flipCoin[$counter]="Tail"
-		#tailCount=$tailCount+1
-		((tailCount++))
+		echo "T"
 	fi
+
+}
+
+while [ $counter -lt $noOfTime ]
+do
+	noOfCoinFlip=0
+	while [ $noOfCoinFlip -lt $noOfCoin ] 
+	do
+		returnValueFromFunction=`flipCoinFunction`
+		flipCoin[$counter]=`echo ${flipCoin[$counter]}$returnValueFromFunction`
+		if [ ${flipCoin[$counter]} == 'HH' ]
+		then
+			((headCount++))
+		else
+			((tailCount++))
+		fi
+		((noOfCoinFlip++))
+	done
 	((counter++))
 done 
 
